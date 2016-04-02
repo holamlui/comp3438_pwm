@@ -6,13 +6,11 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-int beep;
+unsigned long beep;
 int fd;
 int b_fd;
 int main()
-{
-
-	
+{	
 	char current_values[1];
 	int  ret;	
 	b_fd = open("/dev/button2", O_RDONLY);
@@ -32,14 +30,22 @@ int main()
 		}
 		if(current_values[0] == '1')
 		{
-			beep = 1400;
+			beep = 1000;
 		}
 		else if(current_values[0] == '2')
 		{
+			beep = 1200;
+		} 
+		else if(current_values[0] == '3')
+		{
+			beep = 1400;
+		} 
+		else if(current_values[0] == '4')
+		{
 			beep = 0;
 		} 
-		write(fd, &beep, 1);
-		printf("Outout is %c \n", beep);
+		write(fd, &beep, sizeof(unsigned long));
+		printf("Frequency is %d \n", beep);
 	}
 	close(fd);
 	close(b_fd);
